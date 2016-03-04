@@ -1,5 +1,7 @@
 package com.solarApi.authorization;
 
+import io.jsonwebtoken.SignatureException;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -66,9 +68,18 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 				return;
 			}
 			
-			// Get Token from auth header, parse it, and set the user that can be injected 
+			// Get Token from auth header
 			jwt = authorization.get(0).replaceFirst("Bearer ", "");
-			user = jwtUtil.parseJWT(jwt);
+			
+			// Parse the token
+			try {
+				user = jwtUtil.parseJWT(jwt);
+			} catch (SignatureException e) {
+				requestContext.abortWith(responseUtil.unauthorizedResponse().build());
+				return;
+			}
+			
+			// Set injectable user with the values from the token
 			userAuthenticatedEvent.fire(user);
 
 			// Check user roles
