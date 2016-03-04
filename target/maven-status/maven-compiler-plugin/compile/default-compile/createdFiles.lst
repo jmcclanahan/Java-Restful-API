@@ -1,0 +1,13 @@
+com/solarApi/authentication/Login.class
+com/solarApi/authentication/AuthenticationService.class
+com/solarApi/authentication/AuthenticationFilter.class
+JaxRsActivator.class
+com/solarApi/authentication/JWTService.class
+com/solarApi/annotations/Authorized.class
+com/solarApi/authorization/AuthorizationFilter.class
+com/solarApi/user/User.class
+com/solarApi/annotations/AuthenticatedUser.class
+com/solarApi/annotations/PermissionsAllowed.class
+com/solarApi/company/Company.class
+com/solarApi/user/UserProducer.class
+com/solarApi/annotations/Authenticated.class

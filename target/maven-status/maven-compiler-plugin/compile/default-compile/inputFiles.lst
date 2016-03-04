@@ -1,0 +1,13 @@
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/annotations/Authenticated.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/annotations/AuthenticatedUser.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/annotations/Authorized.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/authentication/AuthenticationService.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/user/UserProducer.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/JaxRsActivator.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/annotations/PermissionsAllowed.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/authentication/Login.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/authentication/JWTService.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/company/Company.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/authorization/AuthorizationFilter.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/authentication/AuthenticationFilter.java
+/Users/jMac/Development/code/Java/solar-api/solar-api/src/com/solarApi/user/User.java

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context> 
+  <Resource name="BeanManager"
+  	auth="Container"
+  	type="javax.enterprise.inject.spi.BeanManager"
+  	factory="org.jboss.weld.resources.ManagerObjectFactory"/> 
+  <Resource name="jdbc/solardb" 
+            auth="Container" 
+            type="javax.sql.DataSource" 
+            driverClassName="org.sqlite.JDBC"
+            url="jdbc:sqlite:/${catalina.home}/dbs/development.sqlite3"
+            factory="org.apache.commons.dbcp2.BasicDataSourceFactory">
+  </Resource>
+</Context>
