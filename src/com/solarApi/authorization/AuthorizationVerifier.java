@@ -17,10 +17,9 @@ public class AuthorizationVerifier {
 		boolean isAllowed = false;
 		RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
 		Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-
+		
 		// Is user allowed?
 		for (String role : user.getRolesAndPermissions().keySet()) {
-			
 			// verify user role
 			if (rolesSet.contains(role)) {
 				isAllowed = true;

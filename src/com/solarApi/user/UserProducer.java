@@ -16,7 +16,6 @@ public class UserProducer {
 	private User user = new User();
 	
 	public void handleAuthenticationEvent(@Observes User user) {
-		
 		// Set the User to be injected
 		System.out.println("AUTH EVENT - " + user.getUsername());
 		this.user = user;

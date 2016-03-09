@@ -8,48 +8,25 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.util.Base64;
 
 import com.solarApi.annotations.Authenticated;
+import com.solarApi.base.BaseFilter;
 import com.solarApi.user.User;
-import com.solarApi.utils.JWTUtil;
-import com.solarApi.utils.ResponseUtil;
 
 @Provider
 @Authenticated
-public class AuthenticationFilter implements ContainerRequestFilter {
-	private static final String AUTHENTICATION_SCHEME = "Basic";
-	private static final String AUTHORIZATION_PROPERTY = "Authorization";
-
-	@Context
-	private ResourceInfo resourceInfo;
-
+public class AuthenticationFilter extends BaseFilter {
+	public static final String AUTHENTICATION_SCHEME = "Basic";
+	
 	@Override
-	public void filter(ContainerRequestContext requestContext) {
-		ResponseUtil responseUtil = new ResponseUtil();
-		JWTUtil jwtUtil = new JWTUtil();
+	public void auth(ContainerRequestContext requestContext) {
 		String usernameAndPassword = null;
 
-		// Get request headers
-		final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-
-		// Get authorization header
-		final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-		
-		// If no auth header return 404 Unauthorized
-		if (authorization == null || authorization.isEmpty()) {
-			requestContext.abortWith(responseUtil.unauthorizedResponse().build());
-			return;
-		}
-
 		// Get encoded username and password
-		final String encodedUsernamePassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+		final String encodedUsernamePassword = getAuthorization().get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
 
 		// Decode username and password
 		try {
@@ -77,9 +54,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		user.setUsername(username);
 		user.setRolesAndPermissions(rolesAndPermissions);
 		
-		// Remove Basic Auth Header and add JWT token to be
-		// passed back to the front-end
-		headers.remove(AUTHORIZATION_PROPERTY);
-		headers.add(AUTHORIZATION_PROPERTY,"Bearer " + jwtUtil.createJWT(user, 10000000));
+		// Remove Basic Auth Header and add JWT token to be passed back to the front-end
+		// Access token is set to expire in 30 minutes
+		// Refresh token is set to expire at midnight of the day of creation
+		List<String> jwts = new ArrayList<String>();
+		jwts.add("Bearer " + jwtUtil.createAccessJWT(user, timeCalcUtil.minutesFromNow(30)));
+		jwts.add("Refresh " + jwtUtil.createRefreshJWT(user, timeCalcUtil.getMidnightDate()));
+		
+		getHeaders().remove(AUTHORIZATION_PROPERTY);
+		getHeaders().addAll(AUTHORIZATION_PROPERTY, jwts);
 	}
 }
