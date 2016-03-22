@@ -35,6 +35,13 @@ public class JWTUtil {
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(ACCESS_TOKEN_KEY);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes,
 				signatureAlgorithm.getJcaName());
+		
+		Map<String, List<String>> rolesAndPermissions = new HashMap<>();
+		List<String> permissions = new ArrayList<>();
+		permissions.add("CAN_EDIT");
+		permissions.add("CAN_VIEW");
+		rolesAndPermissions.put("ADMIN", permissions);
+		user.setRolesAndPermissions(rolesAndPermissions);
 
 		// Set the JWT Claims
 		JwtBuilder builder = Jwts.builder().setId(user.getUsername())
@@ -76,6 +83,9 @@ public class JWTUtil {
 		// Set the user and roles/permissions that can be injected
 		user.setUsername(claims.getId());
 		user.setRolesAndPermissions((Map<String, List<String>>) claims.get("RolesAndPermissions"));
+		for (String s : user.getRolesAndPermissions().keySet()) {
+			System.out.println("s " + s);
+		}
 		
 		return user;
 	}

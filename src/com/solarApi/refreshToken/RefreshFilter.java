@@ -9,6 +9,9 @@ import com.solarApi.annotations.AuthenticatedUser;
 import com.solarApi.annotations.GrantRefresh;
 import com.solarApi.base.BaseFilter;
 import com.solarApi.user.User;
+import com.solarApi.utils.JWTUtil;
+import com.solarApi.utils.ResponseUtil;
+import com.solarApi.utils.TimeCalcUtil;
 
 import io.jsonwebtoken.SignatureException;
 
@@ -19,6 +22,13 @@ public class RefreshFilter extends BaseFilter {
 	@Inject
 	@AuthenticatedUser
 	Event<User> userAuthenticatedEvent;
+	
+	@Inject
+	private ResponseUtil responseUtil;
+	@Inject
+	private TimeCalcUtil timeCalcUtil;
+	@Inject
+	private JWTUtil jwtUtil;
 	
 	private User user = new User();
 	
@@ -34,6 +44,7 @@ public class RefreshFilter extends BaseFilter {
 			return;
 		}
 
+		//setJwt(jwtUtil.createAccessJWT(user, timeCalcUtil.minutesFromNow(1)));
 		setJwt(jwtUtil.createAccessJWT(user, timeCalcUtil.minutesFromNow(30)));
 		System.out.println("Creating new JWT - " + getJwt());
 

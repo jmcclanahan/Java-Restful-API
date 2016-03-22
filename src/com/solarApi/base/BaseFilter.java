@@ -5,15 +5,14 @@ import java.util.List;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
+import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.solarApi.utils.JWTUtil;
 import com.solarApi.utils.ResponseUtil;
-import com.solarApi.utils.TimeCalcUtil;
 
 public class BaseFilter implements ContainerRequestFilter {
 	public static final String AUTHENTICATION_PROPERTY = "Authentication";
@@ -22,9 +21,8 @@ public class BaseFilter implements ContainerRequestFilter {
 	@Context
 	private ResourceInfo resourceInfo;
 	
-	public ResponseUtil responseUtil = new ResponseUtil();
-	public TimeCalcUtil timeCalcUtil = new TimeCalcUtil();
-	public JWTUtil jwtUtil = new JWTUtil();
+	@Inject
+	private ResponseUtil responseUtil;
 	
 	private Method method;
 	private MultivaluedMap<String, String> headers;

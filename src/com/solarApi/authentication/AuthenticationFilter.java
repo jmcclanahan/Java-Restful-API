@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.ext.Provider;
 
@@ -15,11 +16,21 @@ import org.jboss.resteasy.util.Base64;
 import com.solarApi.annotations.Authenticated;
 import com.solarApi.base.BaseFilter;
 import com.solarApi.user.User;
+import com.solarApi.utils.JWTUtil;
+import com.solarApi.utils.ResponseUtil;
+import com.solarApi.utils.TimeCalcUtil;
 
 @Provider
 @Authenticated
 public class AuthenticationFilter extends BaseFilter {
 	public static final String AUTHENTICATION_SCHEME = "Basic";
+	
+	@Inject
+	private ResponseUtil responseUtil;
+	@Inject
+	private TimeCalcUtil timeCalcUtil;
+	@Inject
+	private JWTUtil jwtUtil;
 	
 	@Override
 	public void auth(ContainerRequestContext requestContext) {
@@ -46,19 +57,14 @@ public class AuthenticationFilter extends BaseFilter {
 		 * For now we hard-code some roles and permissions
 		 */
 		User user = new User();
-		Map<String, List<String>> rolesAndPermissions = new HashMap<>();
-		List<String> permissions = new ArrayList<>();
-		permissions.add("CAN_EDIT");
-		permissions.add("CAN_VIEW");
-		rolesAndPermissions.put("ADMIN", permissions);
 		user.setUsername(username);
-		user.setRolesAndPermissions(rolesAndPermissions);
 		
 		// Remove Basic Auth Header and add JWT token to be passed back to the front-end
 		// Access token is set to expire in 30 minutes
 		// Refresh token is set to expire at midnight of the day of creation
 		List<String> jwts = new ArrayList<String>();
 		jwts.add("Bearer " + jwtUtil.createAccessJWT(user, timeCalcUtil.minutesFromNow(30)));
+		//jwts.add("Refresh " + jwtUtil.createRefreshJWT(user, timeCalcUtil.minutesFromNow(1)));
 		jwts.add("Refresh " + jwtUtil.createRefreshJWT(user, timeCalcUtil.getMidnightDate()));
 		
 		getHeaders().remove(AUTHORIZATION_PROPERTY);

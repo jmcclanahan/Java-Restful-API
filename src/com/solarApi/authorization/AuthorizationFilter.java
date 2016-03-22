@@ -15,6 +15,8 @@ import com.solarApi.annotations.Authorized;
 import com.solarApi.annotations.PermissionsAllowed;
 import com.solarApi.base.BaseFilter;
 import com.solarApi.user.User;
+import com.solarApi.utils.JWTUtil;
+import com.solarApi.utils.ResponseUtil;
 
 @Provider
 @Authorized
@@ -23,6 +25,11 @@ public class AuthorizationFilter extends BaseFilter {
 	@Inject
 	@AuthenticatedUser
 	Event<User> userAuthenticatedEvent;
+	
+	@Inject
+	private ResponseUtil responseUtil;
+	@Inject
+	private JWTUtil jwtUtil;
 	
 	private User user = new User();
 
@@ -41,7 +48,7 @@ public class AuthorizationFilter extends BaseFilter {
 					.build());
 			return;
 		}
-
+		
 		// Set injectable user with the values from the token
 		userAuthenticatedEvent.fire(user);
 

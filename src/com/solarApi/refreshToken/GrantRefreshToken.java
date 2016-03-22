@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import com.solarApi.annotations.GrantRefresh;
 import com.solarApi.utils.ResponseUtil;
 
-@Path("/refresh")
+@Path("/public/refresh")
 @GrantRefresh
 public class GrantRefreshToken {
 	
